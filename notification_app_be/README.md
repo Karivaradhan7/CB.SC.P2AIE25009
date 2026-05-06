@@ -1,7 +1,7 @@
-# AffordMed Campus Notifications Microservice
+# Campus Notifications Microservice
 
 ## Overview
-This is a microservice built with Node.js and Express to manage campus notifications (Placements, Results, Events) for AffordMed. It pulls raw notifications from an external evaluation service, scores them based on priority and recency, and serves the most important notifications to the campus feed.
+This is a microservice built with Node.js and Express to manage campus notifications (Placements, Results, Events) for amrita vishwa vidhyapeetham. It pulls raw notifications from an external evaluation service, scores them based on priority and recency, and serves the most important notifications to the campus feed.
 
 ## Features
 - **Notification Ordering**: Placement > Result > Event
@@ -96,17 +96,6 @@ Authorization: Bearer <any-valid-token>
 
 ## Testing with Postman
 1. Create a new `GET` request to `http://localhost:3000/api/notifications/priority`.
-2. Go to the **Headers** tab.
-3. Add a key `Authorization` with value `Bearer sample_token_12345`.
-4. Click **Send**.
-5. You should receive a sorted array of notifications.
-
-## Git Commit Sequence
-If pushing this incrementally to Git, follow this sequence:
-1. `feat: init backend structure and config`
-2. `feat: add custom reusable logging middleware`
-3. `feat: implement priority scoring engine`
-4. `feat: add notification service for external fetching`
-5. `feat: create auth and error middleware`
-6. `feat: build notification controller and routes`
-7. `docs: add README instructions and system design docs`
+2. Add a key `Authorization` with value `Bearer sample_token_12345`.
+3. Click **Send**.
+4. You should receive a sorted array of notifications.
