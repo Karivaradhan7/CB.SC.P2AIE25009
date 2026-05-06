@@ -1,101 +1,129 @@
 # Campus Notifications Microservice
 
-## Overview
-This is a microservice built with Node.js and Express to manage campus notifications (Placements, Results, Events) for amrita vishwa vidhyapeetham. It pulls raw notifications from an external evaluation service, scores them based on priority and recency, and serves the most important notifications to the campus feed.
+This project is a backend microservice built using Node.js and Express for handling campus notifications such as placements, results, and events.
 
-## Features
-- **Notification Ordering**: Placement > Result > Event
-- **Recency Decay**: Older notifications lose priority points so the feed stays relevant.
-- **Custom Logger**: Simple logging module without raw `console.log`.
+The service fetches notification data from the provided external API and returns notifications based on priority and recency.
 
-## Folder Structure
-```
+## What it does
+
+- Fetches notifications from external service
+- Sorts notifications based on priority
+- Gives higher priority to placement notifications
+- Handles authentication using middleware
+- Uses a reusable logging module
+- Returns top notifications through REST API
+
+Priority order used:
+- Placement
+- Result
+- Event
+
+More recent notifications are ranked slightly higher compared to older ones.
+
+---
+
+# Project Structure
+
+```text
 notification_app_be/
  ├── src/
- │    ├── config/           # Environment and App config
- │    ├── controllers/      # Route handlers (HTTP layer)
- │    ├── middleware/       # Express middlewares (Auth, Errors)
- │    ├── routes/           # API Route definitions
- │    ├── services/         # Business logic & external API calls
- │    ├── utils/            # Helper functions (Priority scoring)
- │    ├── app.js            # Express app setup
- │    └── server.js         # Entry point
+ │    ├── config/
+ │    ├── controllers/
+ │    ├── middleware/
+ │    ├── routes/
+ │    ├── services/
+ │    ├── utils/
+ │    ├── app.js
+ │    └── server.js
 ```
 
-## Setup & Execution
+---
 
-### Prerequisites
-- Node.js (v16+)
-- npm
+# Setup
 
-### Installation
-1. Install the logging middleware dependency:
-   ```bash
-   # From the project root, ensure logging_middleware is set up:
-   cd ../logging_middleware && npm install
-   ```
-2. Install the backend dependencies:
-   ```bash
-   cd ../notification_app_be
-   npm install
-   # Ensure local package linkage works
-   npm install ../logging_middleware
-   ```
-3. Set up environment variables:
-   ```bash
-   cp .env.example .env
-   ```
+## Install dependencies
 
-### Running the App
 ```bash
-# Run in development mode (nodemon)
-npm run dev
+cd notification_app_be
+npm install
+```
 
-# Run in production mode
+Install local logging middleware package:
+
+```bash
+npm install ../logging_middleware
+```
+
+---
+
+# Environment Setup
+
+Create `.env` file from example:
+
+```bash
+cp .env.example .env
+```
+
+---
+
+# Run the Project
+
+Development mode:
+
+```bash
+npm run dev
+```
+
+Production mode:
+
+```bash
 npm start
 ```
 
-## API Documentation
+Server runs on:
 
-### Get Top Priority Notifications
-**Endpoint:** `GET /api/notifications/priority`
-
-**Description:** Retrieves the top priority notifications for the logged-in student.
-
-**Headers:**
-```http
-Authorization: Bearer <any-valid-token>
+```text
+http://localhost:3000
 ```
 
-**Query Parameters:**
-- `limit` (optional): Number of notifications to return. Default is 10.
+---
 
-**Response Example:**
+# API
+
+## Get Priority Notifications
+
+Endpoint:
+
+```http
+GET /api/notifications/priority
+```
+
+Headers:
+
+```http
+Authorization: Bearer sample_token_12345
+```
+
+Optional query parameter:
+
+```text
+limit
+```
+
+Example:
+
+```http
+GET /api/notifications/priority?limit=10
+```
+
+Sample response:
+
 ```json
 {
   "success": true,
   "count": 2,
-  "notifications": [
-    {
-      "id": "1",
-      "type": "PLACEMENT",
-      "title": "Microsoft Campus Drive",
-      "message": "Scheduled for tomorrow",
-      "createdAt": "2026-05-06T10:00:00.000Z"
-    },
-    {
-      "id": "2",
-      "type": "RESULT",
-      "title": "Semester 6 Results",
-      "message": "Results are out",
-      "createdAt": "2026-05-05T08:00:00.000Z"
-    }
-  ]
+  "notifications": []
 }
 ```
 
-## Testing with Postman
-1. Create a new `GET` request to `http://localhost:3000/api/notifications/priority`.
-2. Add a key `Authorization` with value `Bearer sample_token_12345`.
-3. Click **Send**.
-4. You should receive a sorted array of notifications.
+---
